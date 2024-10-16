@@ -27,8 +27,8 @@ class RTAudioToText:
 
         Parameters
         ----------
-        input_file : String
-                Path to the audio file. 
+            input_file : String
+                    Path to the audio file. 
 
         Returns
         -------
