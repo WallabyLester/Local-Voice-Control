@@ -5,7 +5,35 @@ from pygame.locals import *
 
 
 class GameWindow:
+    """ Pygame interface class. 
+
+    Creates interface window to record audio and display 
+    transcription output.
+
+    ...
+    
+    Attributes
+    ----------
+    w : int
+        Window width.
+    h : int
+        Window height.
+
+    Methods
+    -------
+    update_display():
+        Update game display.
+    """
     def __init__(self, w, h):
+        """ Constructs game display.
+
+        Parameters
+        ----------
+            w : int
+                Window width.
+            h : int 
+                Window height.
+        """
         self.w = w
         self.h = h
         self.scr = pygame.display.set_mode((w, h))
@@ -21,6 +49,8 @@ class GameWindow:
         self.recording_flag = False
 
     def update_display(self):
+        """ Updates game display to signal recording and output.
+        """
         if self.recording_flag:
             self.scr.fill((0,0,0))
             self.scr.blit(self.text_surface_recording, ((w/2)-100, h/2))
@@ -34,13 +64,14 @@ class GameWindow:
 
 
 if __name__=="__main__":
-    fps = 35
-    exitFlag = False
+    fps = 100
     w, h = 1000, 200
     game_window = GameWindow(w, h)
     rt_model = RTAudioToText()
-    fs = 16000
-    duration = 2    # chunk of audio in sec
+    channel = 1         # mono audio
+    fs = 16000          # sampling freq
+    duration = 2        # sample duration
+    exitFlag = False
 
     while not exitFlag:
         events = pygame.event.get()
@@ -58,7 +89,7 @@ if __name__=="__main__":
         if game_window.recording_flag:
             with sd.InputStream(callback=rt_model.recording_callback, dtype='int16', channels=1, samplerate=fs, blocksize=fs*duration):
                 print("Recording...")
-                sd.sleep(duration * 1000) # in ms
+                sd.sleep(duration * 1000)   # in ms
         
             game_window.text_surface_output = game_window.small_font.render(rt_model.output, False, (200, 200, 200))
             game_window.recording_flag = False
