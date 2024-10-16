@@ -7,7 +7,7 @@ def recording_callback(indata, frames, time, status):
     if status:
         print(status)
     # Create tempfile, with autodeletion
-    with tempfile.NamedTemporaryFile(delete=False, suffix='.wav', prefix='audio_', dir='.') as tmpfile:
+    with tempfile.NamedTemporaryFile(delete=True, suffix='.wav', prefix='audio_', dir='.') as tmpfile:
         # save 5 second audio to .wav file
         with wave.open(tmpfile.name, 'wb') as wave_file:
             wave_file.setnchannels(1) # mono audio
